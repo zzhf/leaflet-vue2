@@ -1,14 +1,12 @@
-//inspired by https://github.com/KoRiGaN/Vue2Leaflet
-import './../../static/lib/iclient9-leaflet'
+import Vue from 'vue'
+import App from './App'
+import router from './router'
 
-import LMap from './leaflet/Map'
-import LMarker from './leaflet/Marker'
-import LWmslayer from './leaflet/WMSTileLayer'
-import LSmWmtslayer from './supermap/WMTSTileLayer'
+Vue.config.productionTip = false
 
-export {
-    LMap,
-    LMarker,
-    LWmslayer,
-    LSmWmtslayer
-}
+/* eslint-disable no-new */
+new Vue({
+  el: '#app',
+  router,
+  render: h => h(App)
+})

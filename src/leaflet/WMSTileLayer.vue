@@ -68,7 +68,9 @@
     },
     methods: {
       _initHooks(parent) {
+        console.log('i was hooks')
         this.leaflet.addTo(parent)
+        console.log(parent)
       }
     }    
   }

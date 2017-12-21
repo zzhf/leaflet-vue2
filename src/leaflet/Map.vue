@@ -121,7 +121,9 @@ export default {
     //map Object
     this.leaflet = L.map(this.$el, mapOptions);
     this.addEventHook(this.leaflet, events);
-    console.log(this);
+    // this.leaflet.whenready(()=> {
+
+    // })
     for (let children of this.$children) {
       children._initHooks(this.leaflet);
     }
@@ -156,3 +158,10 @@ export default {
   }
 }
 </script>
+
+<style>
+  .l-map {
+    width: 100%;
+    height: 100%;
+  }
+</style>
