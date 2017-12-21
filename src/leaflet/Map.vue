@@ -6,6 +6,7 @@
 
 <script>
 import L from 'leaflet'
+import mixin from './../mixins/mixin'
 
 /**
  * leaflet map events Array.For details, please look up http://leafletjs.com/reference-1.2.0.html#map-event
@@ -63,67 +64,95 @@ const events = [
 const commandOptions = {
   center: {
     type: [Array, Object],
-    default: undefined
+    default: () => [0, 0]
   },
   zoom: {
     type: [Number],
     default: undefined
   },
+  zoomPanOptions: {
+    type: Object,
+    default: () => {}
+  },
   minZoom: {
     type: Number,
-    default: *
   },
   maxZoom: {
     type: Number,
-    default: *
   },
   maxBounds: {
     type: [Array, Object],
     default: null
   },
+  crs: {
+    type: Object,
+  },
   options: {
     type: Object,
-    default() => {}
+    default: () => {}
   }
 }
 
 export default {
   props: commandOptions,
+  mixins: [mixin],
   mounted() {
-    const mapOptions = this.options;
-    this.center && mapOptions.center = this.center;
-    this.zoom && mapOptions.zoom = this.zoom;
-    this.minZoom && mapOptions.minZoom = this.minZoom;
-    this.maxZoom && mapOptions.maxZoom = this.maxZoom;
-    this.maxBounds && mapOptions.maxBounds = this.maxBounds;
+    let mapOptions = Object.assign({},this.options);
+
+    // console.log(this.center);
+    if (this.center) {
+      mapOptions.center = this.center;
+    }
+    if (this.zoom) {
+      mapOptions.zoom = this.zoom;
+    }
+    if (this.minZoom) {
+      mapOptions.minZoom = this.minZoom;
+    }
+    if (this.maxZoom) {
+      mapOptions.maxZoom = this.maxZoom;
+    }
+    if (this.maxBounds) {
+      mapOptions.maxBounds = this.maxBounds;
+    }
+    if (this.crs) {
+      mapOptions.crs = this.crs
+    }
     //map Object
-    this.map = L.map(this.$el, mapOptions);
-  },
-  watch: {
-    center(val, oldVal) {
-      this.map.
-    },
-    zoom(val, oldVal) {
-
-    },
-    minZoom(val, oldVal) {
-
-    },
-    maxZoom(val, oldVal) {
-
-    },
-    maxBounds(val, oldVal) {
-
-    },
-    options: {
-      handler(val, oldVal) {
-
-      },
-      deep: true
+    this.leaflet = L.map(this.$el, mapOptions);
+    this.addEventHook(this.leaflet, events);
+    console.log(this);
+    for (let children of this.$children) {
+      children._initHooks(this.leaflet);
     }
   },
+  watch: {
+    // center(val, oldVal) {
+    //   this.leaflet.setView(val, this.zoomPanOptions);
+    // },
+    // zoom(val, oldVal) {
+    //   this.leaflet.setView(zoom, this.zoomPanOptions);
+    // },
+    // minZoom(val, oldVal) {
+    //   this.leaflet.setMinZoom(val);
+    // },
+    // maxZoom(val, oldVal) {
+    //   this.leaflet.setMaxZoom(val);
+    // },
+    // maxBounds(val, oldVal) {
+    //   this.leaflet.maxBounds(val);
+    // },
+    // options: {
+    //   handler(val, oldVal) {
+    //     L.setOptions(this.leaflet, val);
+    //   },
+    //   deep: true
+    // }
+  },
   methods: {
-
+    invalidateSize(animate) {
+      this.map.invalidateSize(animate);
+    }
   }
 }
 </script>
