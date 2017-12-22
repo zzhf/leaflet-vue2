@@ -61,18 +61,24 @@ const events = [
  * please look up http://leafletjs.com/reference-1.2.0.html#map-option
  * @type {Object}
  */
-const commandOptions = {
+const props = {
   center: {
     type: [Array, Object],
     default: () => [0, 0]
   },
   zoom: {
-    type: [Number],
-    default: undefined
+    type: Number,
+    default: 0
+  },
+  zoomAround: {
+    type: Object,
+    default: () => {},
+    except: true
   },
   zoomPanOptions: {
     type: Object,
-    default: () => {}
+    default: () => {},
+    except: true
   },
   minZoom: {
     type: Number,
@@ -94,66 +100,48 @@ const commandOptions = {
 }
 
 export default {
-  props: commandOptions,
+  props: {
+    ...props
+  },
   mixins: [mixin],
   mounted() {
-    let mapOptions = Object.assign({},this.options);
-
-    // console.log(this.center);
-    if (this.center) {
-      mapOptions.center = this.center;
-    }
-    if (this.zoom) {
-      mapOptions.zoom = this.zoom;
-    }
-    if (this.minZoom) {
-      mapOptions.minZoom = this.minZoom;
-    }
-    if (this.maxZoom) {
-      mapOptions.maxZoom = this.maxZoom;
-    }
-    if (this.maxBounds) {
-      mapOptions.maxBounds = this.maxBounds;
-    }
-    if (this.crs) {
-      mapOptions.crs = this.crs
-    }
+    let mapOptions = this.mixinPropOption(this._props, props);
     //map Object
     this.leaflet = L.map(this.$el, mapOptions);
     this.addEventHook(this.leaflet, events);
-    // this.leaflet.whenready(()=> {
-
-    // })
     for (let children of this.$children) {
       children._initHooks(this.leaflet);
     }
+    console.log(this.leaflet);
   },
   watch: {
-    // center(val, oldVal) {
-    //   this.leaflet.setView(val, this.zoomPanOptions);
-    // },
-    // zoom(val, oldVal) {
-    //   this.leaflet.setView(zoom, this.zoomPanOptions);
-    // },
-    // minZoom(val, oldVal) {
-    //   this.leaflet.setMinZoom(val);
-    // },
-    // maxZoom(val, oldVal) {
-    //   this.leaflet.setMaxZoom(val);
-    // },
-    // maxBounds(val, oldVal) {
-    //   this.leaflet.maxBounds(val);
-    // },
-    // options: {
-    //   handler(val, oldVal) {
-    //     L.setOptions(this.leaflet, val);
-    //   },
-    //   deep: true
-    // }
+    center(val, newVal) {
+      this.leaflet.setView(val, null, this.getZoomPanelOption());
+    },
+    zoom(val, newVal) {
+      this.leaflet.setZoom(val, this.getZoomPanelOption());
+    },
+    minZoom(val, newVal) {
+      this.leaflet.setMinZoom(val);
+    },
+    maxZoom(val, newVal) {
+      this.leaflet.setMaxZoom(val);
+    },
+    crs(val, newVal) {
+      console.warn('sorry it`s not available for now!');
+    },
+    zoomAround(val, newVal) {
+      this.leaflet.setZoomAround(val, null, this.options.animate)
+    }
   },
   methods: {
-    invalidateSize(animate) {
-      this.map.invalidateSize(animate);
+    getZoomPanelOption() {
+      const zoomPanOptions = this.zoomPanOptions || {
+        animate: this.options.animate,
+        duration: this.options.duration,
+        easeLinearity: this.options.easeLinearity,
+        noMoveStart: this.options.noMoveStart
+      };
     }
   }
 }

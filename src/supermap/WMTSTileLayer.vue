@@ -1,4 +1,6 @@
-<template></template>
+<template>
+  
+</template>
 
 <script>
   import L from 'leaflet'
@@ -19,51 +21,54 @@
     'tooltipclose'
   ]
 
+  const props = {
+    opacity: {
+      type: Number,
+      default: 1
+    },
+    crs: {
+      type: Object,
+      default: null
+    },
+    zIndex: {
+      type: Number,
+    },
+    options: {
+      type: Object,
+      default: () => {}
+    }
+  }
+
   export default {
     mixins: [mixin],
     props: {
+      ...props,
       url: {
         type: String,
         default: '',
         required: true
       },
-      styles: {
-        type: String,
-        default: ''
-      },
-      format: {
-        type: String,
-        default: 'image/png' //override the leaflet default value
-      },
-      transparent: {
-        type: Boolean,
-        default: true
-      },
-      crs: {
-        type: Object,
-        default: null
-      },
-      uppercase: {
-        type: Boolean,
-        default: false
-      },
-      options: {
-        type: Object,
-        default: () => {}
-      }
     },
     mounted() {
-      console.log('i am in')
-      this.leaflet = L.supermap.wmtsLayer(this.url, this.options);
-
+      let layerOptions = this.mixinPropOption(this._props, props);
+      this.leaflet = L.supermap.wmtsLayer(this.url, layerOptions);
       this.addEventHook(this.leaflet, events);
-      console.log(this.leaflet);
       if (this.$parent._isMounted) {
         this._initHooks(this.$parent);
       }
     },
+    watch: {
+      url(val, newVal) {
+        this.leaflet.setUrl(val);
+      },
+      opacity(val, newVal) {
+        this.leaflet.setOpacity(val);
+      },
+      zIndex(val, newVal) {
+        this.leafelt.setZIndex(val);
+      }
+    },
     beforeDestroy() {
-      console.log('i was destroy')
       let parent = this.$parent.leaflet;
       if (parent) {
         parent.removeLayer(this.leaflet);
@@ -71,7 +76,6 @@
     },
     methods: {
       _initHooks(parent) {
-        console.log('i am initHooks')
         this.leaflet.addTo(parent);
       }
     }

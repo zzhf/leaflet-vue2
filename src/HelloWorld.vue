@@ -1,8 +1,16 @@
 <template>
   <div class="map">
-    <l-map :maxZoom="18" :center="[0, 0]" :zoom="0" :crs="crs" :options="mapOptions">
-      <!-- <l-wmslayer></l-wmslayer> -->
-      <l-sm-wmtslayer url="http://support.supermap.com.cn:8090/iserver/services/map-china400/wmts100" :options="wmtsOptions"></l-sm-wmtslayer>
+    <l-map :maxZoom="18" :center="[0, 0]" :zoom="5" :crs="crs" :options="mapOptions">
+      <l-wms-tilelayer 
+        url="http://support.supermap.com.cn:8090/iserver/services/map-china400/wms111/China" 
+        :options="wmsOptions">
+      </l-wms-tilelayer>
+      <!-- <l-sm-wmtslayer 
+        url="http://support.supermap.com.cn:8090/iserver/services/map-china400/wmts100" 
+        :options="wmtsOptions">
+      </l-sm-wmtslayer>
+      <l-sm-restlayer url="http://support.supermap.com.cn:8090/iserver/services/map-china400/rest/maps/China">
+      </l-sm-restlayer> -->
       <!-- <l-marker :center="[30, 110]"></l-marker> -->
     </l-map>
   </div>
@@ -15,6 +23,7 @@
   import LMarker from './leaflet/Marker'
   import LWmsTilelayer from './leaflet/WMSTileLayer'
   import LSmWmtslayer from './supermap/WMTSTileLayer'
+  import LSmRestlayer from './supermap/RESTTileLayer'
 
   var res = [];
   for (var i = 0; i < 22; i++) {
@@ -28,16 +37,22 @@
 
   export default {
     components: {
-      LMap, LMarker, LWmsTilelayer, LSmWmtslayer
+      LMap, LMarker, LWmsTilelayer, LSmWmtslayer, LSmRestlayer
     },
     data() {
       return {
-        crs: crs,
+        crs: null,
         wmtsOptions: {
             layer: "China",
             style: "default",
             tilematrixSet: "Custom_China",
             format: "image/png",
+        },
+        wmsOptions: {
+          layers: 'China',
+          format: 'image/png',
+          transparent: true,
+          noWrap: true,
         },
         mapOptions: {
           zoom: 0,

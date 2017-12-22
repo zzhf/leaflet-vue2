@@ -1,9 +1,9 @@
 <template>
-	
+  
 </template>
 
 <script>
-	import L from 'leaflet'
+  import L from 'leaflet'
   import mixin from './../mixins/mixin'
 
   const events = [
@@ -22,13 +22,6 @@
   ]
 
   const props = {
-    opacity: {
-      type: Number,
-      default: 1
-    },
-    zIndex: {
-      type: Number,
-    },
     format: {
       type: String,
       default: 'image/png' //override the leaflet default value
@@ -37,9 +30,16 @@
       type: Boolean,
       default: true
     },
+     opacity: {
+      type: Number,
+      default: 1
+    },
     crs: {
       type: Object,
       default: null
+    },
+    zIndex: {
+      type: Number,
     },
     options: {
       type: Object,
@@ -59,11 +59,8 @@
     },
     mounted() {
       let layerOptions = this.mixinPropOption(this._props, props);
-
-      this.leaflet = L.tileLayer.wms(this.url, layerOptions);
-
+      this.leaflet = L.supermap.tiledMapLayer(this.url, layerOptions);
       this.addEventHook(this.leaflet, events);
-
       if (this.$parent._isMounted) {
         this._initHooks(this.$parent);
       }
@@ -87,8 +84,8 @@
     },
     methods: {
       _initHooks(parent) {
-        this.leaflet.addTo(parent)
+        this.leaflet.addTo(parent);
       }
-    }    
+    }
   }
 </script>

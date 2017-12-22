@@ -2,16 +2,8 @@
   const publicPrefix = 'l-';
 
   export default {
-    props: {
-      // options: {
-      //   type: Object,
-      //   default:() => {}
-      // }
-    },
-    watch: {
-      // options(newVal, oldVal) {
-
-      // }
+    created() {
+      console.log(this, this._props);
     },
     methods: {
       addEventHook(l, events) {
@@ -22,15 +14,27 @@
           })
         })
       },
-      // addPropWatcherHook(l, prop) {
-      //   const props = this.props;
-      //   const keys = Object.keys(props);
-      //   keys.forEach((key, index) => {
-      //     if (key === 'options') {
-      //       this.$watch()
-      //     }
-      //   })
-      // },
+      addPropWatcherHook(l, prop) {
+        const props = this.props;
+        const keys = Object.keys(props);
+        keys.forEach((key, index) => {
+          if (key === 'options') {
+            this.$watch()
+          }
+        })
+      },
+      mixinPropOption(props, propsOption) {
+        let options = Object.assign({}, props['options'] || {})
+        let keys = Object.keys(props);
+        for (let i = keys.length - 1; i >= 0; i--) {
+          let key = keys[i];
+          const mixin = propsOption[key] && key !== 'options' && props[key] && !propsOption[key]['except'];
+          if (mixin) {
+            options[key] = props[key];
+          }
+        }
+        return options;
+      },
       trigger(e) {
         this.$emit(`${publicPrefix}${event}`, e);
       }
