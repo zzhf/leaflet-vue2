@@ -99,20 +99,11 @@
       }
     },
     mounted() {
-      // this.icon && this.options.icon = this.icon;
-      // this.draggable && this.options.draggable = this.draggable;
-      // this.title && this.options.title = this.title;
-      // this.alt && this.options.alt = this.alt;
-      // this.zIndexOffset && this.options.zIndexOffset = this.zIndexOffset;
-      // this.opacity && this.options.opacity = this.opacity;
-      // this.riseOnHover && this.options.riseOnHover = this.riseOnHover;
-      // this.riseOffset && this.options.riseOffset = this.riseOffset;
-      // this.pane && this.options.pane = this.pane;
-      // this.bubblingMouseEvents && this.options.bubblingMouseEvents = this.bubblingMouseEvents;
-      // this.interactive && this.options.interactive = this.interactive;
-      // this.attribution && this.options.attribution = this.attribution;
-      
       this.leaflet = L.marker(this.latLng, this.options);
+
+      this.leaflet.on('click', function() {
+        
+      })
 
       this.addEventHook(this.leaflet, events);
 

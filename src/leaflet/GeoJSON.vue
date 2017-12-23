@@ -18,7 +18,6 @@
   ]
 
   const props = {
-    mixins: [mixin],
     pointToLayer: {
       type: Function
     },
@@ -40,6 +39,7 @@
   }
 
   export default {
+    mixins: [mixin],
     props: {
       ...props,
       data: {
@@ -59,12 +59,21 @@
       }
     },
     watch: {
-      data(val, oldVal) {
-        this.leaflet.addData(val);
+      data: {
+        handler(val, oldVal) {
+          this.leaflet.addData(val);
+        }
       },
-      style(val, oldVal) {
-        this.resetStyle(val);
+      style: {
+        handler(val, oldVal) {
+          this.leaflet.addData(val);
+        }
       }
+    },
+    methods: {
+      // _initHooks(parent) {
+      //   this.leaflet.addTo(parent)
+      // }
     }
   }
 </script>

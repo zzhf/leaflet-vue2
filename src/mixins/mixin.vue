@@ -6,6 +6,10 @@
       console.log(this, this._props);
     },
     methods: {
+      //can be overrided
+      _initHooks(parent) {
+        this.leaflet.addTo(parent)
+      },
       addEventHook(l, events) {
         events.forEach((event, index) => {
           let eventName = `${publicPrefix}${event}`;

@@ -86,9 +86,9 @@
       }
     },
     methods: {
-      _initHooks(parent) {
-        this.leaflet.addTo(parent)
-      }
+      // _initHooks(parent) {
+      //   this.leaflet.addTo(parent)
+      // }
     }    
   }
 </script>
