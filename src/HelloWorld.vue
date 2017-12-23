@@ -1,10 +1,10 @@
 <template>
   <div class="map">
     <l-map :maxZoom="18" :center="[0, 0]" :zoom="5" :crs="crs" :options="mapOptions">
-      <l-wms-tilelayer 
+      <!-- <l-wms-tilelayer 
         url="http://support.supermap.com.cn:8090/iserver/services/map-china400/wms111/China" 
         :options="wmsOptions">
-      </l-wms-tilelayer>
+      </l-wms-tilelayer> -->
       <!-- <l-sm-wmtslayer 
         url="http://support.supermap.com.cn:8090/iserver/services/map-china400/wmts100" 
         :options="wmtsOptions">
