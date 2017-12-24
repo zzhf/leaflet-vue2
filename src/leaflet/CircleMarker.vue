@@ -22,12 +22,6 @@
   ]
 
   const props = {
-    smoothFactor: {
-      type: Number,
-    },
-    noClip: {
-      type: Boolean,
-    },
     interactive: {
       type: Boolean,
       default: true
@@ -37,10 +31,13 @@
     },
     attribution: {
       type: String
-    }
+    },
     options: {
       type: Object,
       default: () => {}
+    },
+    radius: {
+      type: Number
     },
   }
  
@@ -48,15 +45,15 @@
     mixins: [pathMixin],
     props: {
       ...props,
-      latLngs: {
-        type: Array
+      center: {
+        type: [Array, Object]
       }
     },
 
     mounted() {
       let layerOptions = this.mixinPropOption(this._props, props);
 
-      this.leaflet = L.polyline(this.latlngs, layerOptions);
+      this.leaflet = L.circleMarker(this.center, layerOptions);
 
       this.addEventHook(this.leaflet, events);
 
@@ -65,8 +62,11 @@
       }
     },
     watch: {
-      latLngs(val, newVal) {
-        this.leaflet.setLatLngs(val);
+      radius(val, newVal) {
+        this.leaflet.setRadius(val);
+      },
+      center(val, newVal) {
+        this.leafelt.setLatLng(val);
       },
       smoothFactor(val, newVal) {
         this.leaflet.setSmoothFactor(val);

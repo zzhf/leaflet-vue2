@@ -56,7 +56,7 @@
     mounted() {
       let layerOptions = this.mixinPropOption(this._props, props);
 
-      this.leaflet = L.polyline(this.latlngs, layerOptions);
+      this.leaflet = L.polygon(this.latlngs, layerOptions);
 
       this.addEventHook(this.leaflet, events);
 

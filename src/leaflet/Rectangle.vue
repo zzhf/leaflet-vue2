@@ -37,7 +37,7 @@
     },
     attribution: {
       type: String
-    }
+    },
     options: {
       type: Object,
       default: () => {}
@@ -48,15 +48,15 @@
     mixins: [pathMixin],
     props: {
       ...props,
-      latLngs: {
-        type: Array
+      bounds: {
+        type: [Array, Object]
       }
     },
 
     mounted() {
       let layerOptions = this.mixinPropOption(this._props, props);
 
-      this.leaflet = L.polyline(this.latlngs, layerOptions);
+      this.leaflet = L.rectangle(this.bounds, layerOptions);
 
       this.addEventHook(this.leaflet, events);
 
@@ -65,8 +65,8 @@
       }
     },
     watch: {
-      latLngs(val, newVal) {
-        this.leaflet.setLatLngs(val);
+      bounds(val, newVal) {
+        this.leaflet.setBounds(val);
       },
       smoothFactor(val, newVal) {
         this.leaflet.setSmoothFactor(val);
